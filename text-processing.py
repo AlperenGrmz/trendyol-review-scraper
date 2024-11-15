@@ -14,7 +14,7 @@ from nltk.tokenize import word_tokenize
 nltk.download("punkt")
 nltk.download("stopwords")
 
-zemberek_jar_path = "Zemberek-Python-Examples\\bin\\zemberek-full.jar"
+zemberek_jar_path = "zemberek-full.jar"
 
 if not jpype.isJVMStarted():
     jpype.startJVM(classpath=[zemberek_jar_path])
