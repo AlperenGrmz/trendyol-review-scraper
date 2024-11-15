@@ -113,21 +113,53 @@ zemberek_jar_path = "zemberek-full.jar"
 
 Turkce diline ozgu stop words (anlam tasımayan sık kullanılan kelimeler) temizlenmistir.
 
+```python
+stop_words = set(stopwords.words("turkish"))
+```
+
 ### 2.*Tokenizasyon ve Kücük Harfe Donüstürme*
 
 Yorumlar, kelime bazında bölümlere ayrılmıs ve tüm kelimeler kücük harfe dönüstürülmüstür.
+
+```python
+#Tokenizasyon
+tokens = word_tokenize(comment_line) 
+#Kücük Harfe Dönüstürme
+tokens = [word for word in tokens if word.lower() not in stop_words] 
+```
 
 ### 3.*Zemberek ile Kök ve Tür Analizi*
 
 Zemberek, her kelimenin kok halini (lemma) ve türünü (primaryPos) cıkararak Turkce diline ozgu dil bilgisi kurallarını dikkate almaktadır. Bu calısmada, Zemberek’in kelime analizi ozellikleri kullanılarak, yorumlar ic¸erisindeki kelimeler koklerine indirilmis ve turlerine gore sınıflandırılmıstır. Ornegin, ”yazıyorum” kelimesi kokune (”yaz”) indirgenmis ve turu (fiil) olarak belirlenmistir
 
+```python
+# Analiz
+analysis = morphology.analyzeSentence(cleaned_comment)
+# Kök ve Tür Bilgilerinin Çekilmesi
+for result in analysis:
+    for single_analysis in result.getAnalysisResults():
+        root = single_analysis.getDictionaryItem().lemma
+        pos = single_analysis.getDictionaryItem().primaryPos.name()
+```
+
 ### 4.*Islenmis Yorumaların Yapılandırılması*
 
 Yorumların her biri, kök ve tür bilgileriyle birlikte yenidenen yapılandırımlıstır.
 
+```python
+simplified_output.append({"original_comment": comment_line, "rating": rating_line, "processed": processed_line})
+```
+
 ### 5.*Verilerin Kaydedilmesi*
 
 Islenmis yorumlar ve analiz sonucları bir pandas DataFrame'ine dönüştürülmüş ve `simlified.comments.csv` dosyası olarak kaydedilmiştir. Bu dosya duygu analizi modeli için temiz ve tutarlı bir veri kaynağı oluşturmuştur.
+
+```python
+# DataFrame donusturme islemi
+output_df = pd.DataFrame(simplified_output)
+# CSV formatına kaydedilmesi
+output_df.to_csv('simplified_comments2.csv', index=False, encoding='utf-8-sig')
+```
 
 ## Lisans
 
