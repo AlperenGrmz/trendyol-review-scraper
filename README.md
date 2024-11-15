@@ -21,7 +21,7 @@ python --version
 
 Projeyi çalıştırabilmek için aşağıdaki Python kütüphanelerine ihtiyaç vardır.
 
-**Otomatik Kurulum**: Alternatif olarak, tüm kütüphaneleri tek bir komutla kurmak için `requirements.txt` dosyasını kullanabilirsiniz:
+**Otomatik Kurulum**: Tüm kütüphaneleri tek bir komutla kurmak için `requirements.txt` dosyasını kullanabilirsiniz:
 
 ```bash
 pip install -r requirements.txt
@@ -80,6 +80,54 @@ Toplanan yorum ve puanlar `comments_data` listesine eklenip, pandas ile bir Data
 Bu projede kullanılan veri setine [Google Drive bağlantısı üzerinden](https://drive.google.com/drive/folders/127UIPZt-PtSNaxbG2G67CC7SCr50NEa_) erişebilirsiniz. Bu veriler, yalnızca eğitim ve analiz amaçlıdır.
 
 > **Uyarı:** Veri seti, Trendyol platformundan çekilen yorumlardan oluşmaktadır. Verilerin yalnızca araştırma, analiz ve eğitim amacıyla kullanılması önerilir.
+
+---
+
+## Yorum Analiz ve Basitleştirme
+
+`text-processing.py`, kullanıcı yorumlarını Türkçe doğal dil işleme teknikleriyle (Zemberek, NLTK) analiz eder ve yorumları sadeleştirir. Yorumları analiz ederek, kelimelerinin köklerini ve kelime türlerini çıkarır. Sonuçlar, yorumlar ve puanlarla birlikte `simplified_comments1.csv` dosyasına kaydedilir.
+
+### Kurulum
+
+Projeyi çalıştırabilmek için aşağıdaki Python kütüphanelerine ihtiyaç vardır.
+
+```bash
+pip install jpype
+pip install nltk
+```
+
+Ayrıca, Zemberek kütüphanesini kullanabilmek için **zemberek-full.jar** dosyasını indirmeniz gereklidir. Bu dosyayı, aşağıdaki bağlantılardan temin edebilirsiniz:
+
+- **Zemberek GitHub Deposu**: [Zemberek-NLP](https://github.com/ahmetaa/zemberek-nlp)
+- **Google Drive Bağlantısı**: [Zemberek JAR Dosyası](https://drive.google.com/drive/folders/your-folder-link-here)
+
+İndirilen dosyayı, proje dizininizde uygun bir konumda bulundurmanız ve doğru yol üzerinden yüklemeniz gerekecektir.
+
+```python
+zemberek_jar_path = "zemberek-full.jar"
+```
+
+### Acıklama
+
+### 1.*Stop Words Temizleme*
+
+Turkce diline ozgu stop words (anlam tasımayan sık kullanılan kelimeler) temizlenmistir.
+
+### 2.*Tokenizasyon ve Kücük Harfe Donüstürme*
+
+Yorumlar, kelime bazında bölümlere ayrılmıs ve tüm kelimeler kücük harfe dönüstürülmüstür.
+
+### 3.*Zemberek ile Kök ve Tür Analizi*
+
+Zemberek, her kelimenin kok halini (lemma) ve türünü (primaryPos) cıkararak Turkce diline ozgu dil bilgisi kurallarını dikkate almaktadır. Bu calısmada, Zemberek’in kelime analizi ozellikleri kullanılarak, yorumlar ic¸erisindeki kelimeler koklerine indirilmis ve turlerine gore sınıflandırılmıstır. Ornegin, ”yazıyorum” kelimesi kokune (”yaz”) indirgenmis ve turu (fiil) olarak belirlenmistir
+
+### 4.*Islenmis Yorumaların Yapılandırılması*
+
+Yorumların her biri, kök ve tür bilgileriyle birlikte yenidenen yapılandırımlıstır.
+
+### 5.*Verilerin Kaydedilmesi*
+
+Islenmis yorumlar ve analiz sonucları bir pandas DataFrame'ine dönüştürülmüş ve `simlified.comments.csv` dosyası olarak kaydedilmiştir. Bu dosya duygu analizi modeli için temiz ve tutarlı bir veri kaynağı oluşturmuştur.
 
 ## Lisans
 
